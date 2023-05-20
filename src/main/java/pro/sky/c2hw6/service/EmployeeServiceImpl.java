@@ -6,32 +6,32 @@ import pro.sky.c2hw6.util.EmployeeAlreadyAddedException;
 import pro.sky.c2hw6.util.EmployeeNotFoundException;
 import pro.sky.c2hw6.util.EmployeeStorageIsFullException;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
-    static final int MAX_COUNT = 3;
-    List<Employee> employees;
+    static final int MAX_COUNT = 10;
+    Map<String, Employee> employeeMap;
 
-    public EmployeeServiceImpl(List<Employee> employees) {
-        this.employees = employees;
+    public EmployeeServiceImpl() {
+        this.employeeMap = new HashMap<>();
     }
 
     @Override
     public Employee addEmployee(String firstName, String lastName) {
 
-        if (employees.size() == MAX_COUNT) {
+        if (employeeMap.size() >= MAX_COUNT) {
+
             throw new EmployeeStorageIsFullException("Max capacity of employee list is reached, new employee not added");
         }
 
         Employee employee = new Employee(firstName, lastName);
 
-        if (employees.contains(employee)) {
+        if (employeeMap.containsKey(employee.checkFullName())) {
             throw new EmployeeAlreadyAddedException("Employee already exist in current list");
         }
 
-        employees.add(employee);
+        employeeMap.put(employee.checkFullName(), employee);
         return employee;
     }
 
@@ -40,12 +40,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         Employee employee = new Employee(firstName, lastName);
 
-        if (!employees.contains(employee)) {
+        if (!employeeMap.containsKey(employee.checkFullName())) {
             throw new EmployeeNotFoundException("Employee not found");
         }
 
-        employees.remove(employee);
-        return employee;
+        return employeeMap.remove(employee.checkFullName());
     }
 
     @Override
@@ -53,16 +52,16 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         Employee employee = new Employee(firstName, lastName);
 
-        if (!employees.contains(employee)) {
+        if (!employeeMap.containsKey(employee.checkFullName())) {
             throw new EmployeeNotFoundException("Employee not found");
         }
 
-        return employee;
+        return employeeMap.get(employee.checkFullName());
     }
 
     @Override
-    public List<Employee> findAllEmployees() {
+    public Collection<Employee> findAllEmployees() {
 
-        return Collections.unmodifiableList(employees);
+        return Collections.unmodifiableCollection(employeeMap.values());
     }
 }
