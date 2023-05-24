@@ -18,14 +18,14 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee addEmployee(String firstName, String lastName) {
+    public Employee addEmployee(String firstName, String lastName, Integer department, Integer salary) {
 
         if (employeeMap.size() >= MAX_COUNT) {
 
             throw new EmployeeStorageIsFullException("Max capacity of employee list is reached, new employee not added");
         }
 
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = new Employee(firstName, lastName, department, salary);
 
         if (employeeMap.containsKey(employee.checkFullName())) {
             throw new EmployeeAlreadyAddedException("Employee already exist in current list");
