@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import pro.sky.c2hw6.entity.Employee;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,19 +39,7 @@ public class DepartmentServiceImpl implements DepartmentService{
     @Override
     public Map<Integer, List<Employee>> findAllEmployeesWithDepartmentSeparation() {
 
-        List<Integer> departmentNumbers = employeeService.findAllEmployees().stream()
-                .map(Employee::getDepartment)
-                .distinct()
-                .collect(Collectors.toList());
-
-        Map<Integer, List<Employee>> departmentMap;
-
-        departmentMap = departmentNumbers.stream()
-                .collect(Collectors.toMap(
-                        Function.identity(),
-                        this::findEmployeesOfDepartment
-                ));
-
-        return departmentMap;
+        return employeeService.findAllEmployees().stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment));
     }
 }
