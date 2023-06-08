@@ -5,13 +5,20 @@ import pro.sky.c2hw6.entity.Employee;
 import pro.sky.c2hw6.util.EmployeeAlreadyAddedException;
 import pro.sky.c2hw6.util.EmployeeNotFoundException;
 import pro.sky.c2hw6.util.EmployeeStorageIsFullException;
+import pro.sky.c2hw6.util.InvalidInputException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.isAlpha;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
     static final int MAX_COUNT = 10;
     Map<String, Employee> employeeMap;
+
 
     public EmployeeServiceImpl() {
         this.employeeMap = new HashMap<>();
@@ -20,8 +27,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee addEmployee(String firstName, String lastName, Integer department, Integer salary) {
 
-        if (employeeMap.size() >= MAX_COUNT) {
+        if (!validateInputFio(firstName, lastName)) {
+            throw new InvalidInputException();
+        }
 
+        if (employeeMap.size() >= MAX_COUNT) {
             throw new EmployeeStorageIsFullException("Max capacity of employee list is reached, new employee not added");
         }
 
@@ -38,6 +48,10 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee removeEmployee(String firstName, String lastName) {
 
+        if (!validateInputFio(firstName, lastName)) {
+            throw new InvalidInputException();
+        }
+
         Employee employee = new Employee(firstName, lastName);
 
         if (!employeeMap.containsKey(employee.checkFullName())) {
@@ -49,6 +63,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee findEmployee(String firstName, String lastName) {
+
+        if (!validateInputFio(firstName, lastName)) {
+            throw new InvalidInputException();
+        }
 
         Employee employee = new Employee(firstName, lastName);
 
@@ -63,5 +81,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Collection<Employee> findAllEmployees() {
 
         return Collections.unmodifiableCollection(employeeMap.values());
+    }
+
+    private boolean validateInputFio(String firstName, String lastName) {
+        return isAlpha(firstName) && isAlpha(lastName);
     }
 }

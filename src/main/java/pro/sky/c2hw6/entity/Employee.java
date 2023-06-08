@@ -2,6 +2,8 @@ package pro.sky.c2hw6.entity;
 
 import java.util.Objects;
 
+import static org.apache.commons.lang3.StringUtils.capitalize;
+
 public class Employee {
 
     private final String firstName;
@@ -11,8 +13,8 @@ public class Employee {
 
     // for add employee
     public Employee(String firstName, String lastName, Integer department, Integer salary) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = capitalize(firstName.toLowerCase());
+        this.lastName = capitalize(lastName.toLowerCase());
         this.department = department;
         this.salary = salary;
     }
