@@ -27,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee addEmployee(String firstName, String lastName, Integer department, Integer salary) {
 
-        if (!validateInputFio(firstName, lastName)) {
+        if (!validateInputNames(firstName, lastName)) {
             throw new InvalidInputException();
         }
 
@@ -48,33 +48,29 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee removeEmployee(String firstName, String lastName) {
 
-        if (!validateInputFio(firstName, lastName)) {
+        if (!validateInputNames(firstName, lastName)) {
             throw new InvalidInputException();
         }
 
-        Employee employee = new Employee(firstName, lastName);
-
-        if (!employeeMap.containsKey(employee.checkFullName())) {
+        if (!employeeMap.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Employee not found");
         }
 
-        return employeeMap.remove(employee.checkFullName());
+        return employeeMap.remove(firstName + " " + lastName);
     }
 
     @Override
     public Employee findEmployee(String firstName, String lastName) {
 
-        if (!validateInputFio(firstName, lastName)) {
+        if (!validateInputNames(firstName, lastName)) {
             throw new InvalidInputException();
         }
 
-        Employee employee = new Employee(firstName, lastName);
-
-        if (!employeeMap.containsKey(employee.checkFullName())) {
+        if (!employeeMap.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Employee not found");
         }
 
-        return employeeMap.get(employee.checkFullName());
+        return employeeMap.get(firstName + " " + lastName);
     }
 
     @Override
@@ -83,7 +79,13 @@ public class EmployeeServiceImpl implements EmployeeService{
         return Collections.unmodifiableCollection(employeeMap.values());
     }
 
-    private boolean validateInputFio(String firstName, String lastName) {
-        return isAlpha(firstName) && isAlpha(lastName);
+    private boolean validateInputNames(String... names) {
+
+        for (String name : names) {
+            if(!isAlpha(name)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

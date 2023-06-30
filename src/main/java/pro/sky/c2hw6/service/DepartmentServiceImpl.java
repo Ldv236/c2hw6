@@ -1,5 +1,6 @@
 package pro.sky.c2hw6.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.c2hw6.entity.Employee;
 
@@ -11,35 +12,60 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     private  final EmployeeService employeeService;
 
+    @Autowired
     public DepartmentServiceImpl(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
     @Override
-    public Optional<Employee> findMaxSalary(Integer department) {
+    public Optional<Employee> findMaxSalaryEmployee(Integer department) {
         return employeeService.findAllEmployees().stream()
                 .filter(e -> e.getDepartment() == department)
                 .max(Comparator.comparingInt(Employee::getSalary));
     }
 
     @Override
-    public Optional<Employee> findMinSalary(Integer department) {
+    public Optional<Employee> findMinSalaryEmployee(Integer department) {
         return employeeService.findAllEmployees().stream()
                 .filter(e -> e.getDepartment() == department)
                 .min(Comparator.comparingInt(Employee::getSalary));
     }
 
     @Override
-    public List<Employee> findEmployeesOfDepartment(Integer department) {
+    public List<Employee> findEmployeesByDepartment(Integer department) {
         return employeeService.findAllEmployees().stream()
                 .filter(e -> e.getDepartment() == department)
                 .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public Map<Integer, List<Employee>> findAllEmployeesWithDepartmentSeparation() {
+    public Map<Integer, List<Employee>> findAllEmployeesSeparatedByDepartment() {
 
         return employeeService.findAllEmployees().stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment));
+    }
+
+    @Override
+    public  Integer findSumSalaryByDepartment(Integer id) {
+        return employeeService.findAllEmployees().stream()
+                .filter(e -> e.getDepartment() == id)
+                .mapToInt(Employee::getSalary)
+                .sum();
+    }
+
+    @Override
+    public  OptionalInt findMaxSalaryByDepartment(Integer id) {
+        return employeeService.findAllEmployees().stream()
+                .filter(e -> e.getDepartment() == id)
+                .mapToInt(Employee::getSalary)
+                .max();
+    }
+
+    @Override
+    public  OptionalInt findMinSalaryByDepartment(Integer id) {
+        return employeeService.findAllEmployees().stream()
+                .filter(e -> e.getDepartment() == id)
+                .mapToInt(Employee::getSalary)
+                .min();
     }
 }
