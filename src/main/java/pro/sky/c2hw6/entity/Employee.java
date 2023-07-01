@@ -19,11 +19,6 @@ public class Employee {
         this.salary = salary;
     }
 
-    // for find and remove employee
-    public Employee(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
     public String getFirstName() {
         return firstName;
     }
