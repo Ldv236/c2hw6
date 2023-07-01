@@ -47,7 +47,6 @@ public class DepartmentServiceTest {
 
     @Test
     public void shouldReturnAllEmployeesByDepartment() {
-        setUp();
 
         List<Employee> expected1 = createTestEmployeeList(1);
         List<Employee> actual1 = out.findEmployeesByDepartment(1);
@@ -63,8 +62,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void testGetGroupEmployeeByDepartment() {
-        setUp();
+    public void shouldReturnGroupingEmployee() {
 
         Map<Integer, List<Employee>> actual = out.findAllEmployeesSeparatedByDepartment();
 
@@ -84,7 +82,6 @@ public class DepartmentServiceTest {
 
     @Test
     public void shouldReturnSumSalaryByDepartment() {
-        setUp();
 
         assertEquals(270_000, out.findSumSalaryByDepartment(1));
         assertEquals(230_000, out.findSumSalaryByDepartment(2));
@@ -92,8 +89,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void testGetMaxSalaryByDepartment() {
-        setUp();
+    public void shouldReturnMaxSalaryByDepartment() {
 
         assertEquals(100_000, out.findMaxSalaryByDepartment(1).getAsInt());
         assertEquals(120_000, out.findMaxSalaryByDepartment(2).getAsInt());
@@ -101,8 +97,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void testGetMinSalaryByDepartment() {
-        setUp();
+    public void shouldReturnMinSalaryByDepartment() {
 
         assertEquals(80_000, out.findMinSalaryByDepartment(1).getAsInt());
         assertEquals(110_000, out.findMinSalaryByDepartment(2).getAsInt());
