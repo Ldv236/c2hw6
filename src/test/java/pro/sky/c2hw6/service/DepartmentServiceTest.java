@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.c2hw6.entity.Employee;
 
@@ -13,19 +14,19 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
 
-    @Mock
-    private EmployeeServiceImpl employeeService;
+//    @Mock
+    private EmployeeService employeeService;
 
-    @InjectMocks
+//    @InjectMocks
     private DepartmentServiceImpl out;
 
     @BeforeEach
     public void setUp() {
-        List<Employee> fullList = createTestEmployeeList(0);
-        when(employeeService.findAllEmployees()).thenReturn(fullList);
+        employeeService = Mockito.mock(EmployeeService.class);
+        out = new DepartmentServiceImpl(employeeService);
     }
 
     private List<Employee> createTestEmployeeList(int departmentId) {
@@ -48,6 +49,9 @@ public class DepartmentServiceTest {
     @Test
     public void shouldReturnAllEmployeesByDepartment() {
 
+        List<Employee> fullList = createTestEmployeeList(0);
+        when(employeeService.findAllEmployees()).thenReturn(fullList);
+
         List<Employee> expected1 = createTestEmployeeList(1);
         List<Employee> actual1 = out.findEmployeesByDepartment(1);
         assertEquals(expected1, actual1);
@@ -63,6 +67,9 @@ public class DepartmentServiceTest {
 
     @Test
     public void shouldReturnGroupingEmployee() {
+
+        List<Employee> fullList = createTestEmployeeList(0);
+        when(employeeService.findAllEmployees()).thenReturn(fullList);
 
         Map<Integer, List<Employee>> actual = out.findAllEmployeesSeparatedByDepartment();
 
@@ -83,6 +90,9 @@ public class DepartmentServiceTest {
     @Test
     public void shouldReturnSumSalaryByDepartment() {
 
+        List<Employee> fullList = createTestEmployeeList(0);
+        when(employeeService.findAllEmployees()).thenReturn(fullList);
+
         assertEquals(270_000, out.findSumSalaryByDepartment(1));
         assertEquals(230_000, out.findSumSalaryByDepartment(2));
         assertEquals(0, out.findSumSalaryByDepartment(3));
@@ -91,6 +101,9 @@ public class DepartmentServiceTest {
     @Test
     public void shouldReturnMaxSalaryByDepartment() {
 
+        List<Employee> fullList = createTestEmployeeList(0);
+        when(employeeService.findAllEmployees()).thenReturn(fullList);
+
         assertEquals(100_000, out.findMaxSalaryByDepartment(1).getAsInt());
         assertEquals(120_000, out.findMaxSalaryByDepartment(2).getAsInt());
         assertFalse(out.findMaxSalaryByDepartment(3).isPresent());
@@ -98,6 +111,9 @@ public class DepartmentServiceTest {
 
     @Test
     public void shouldReturnMinSalaryByDepartment() {
+
+        List<Employee> fullList = createTestEmployeeList(0);
+        when(employeeService.findAllEmployees()).thenReturn(fullList);
 
         assertEquals(80_000, out.findMinSalaryByDepartment(1).getAsInt());
         assertEquals(110_000, out.findMinSalaryByDepartment(2).getAsInt());
