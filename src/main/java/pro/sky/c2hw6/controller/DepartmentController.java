@@ -41,8 +41,8 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}/salary/sum")
-    public Integer findSumSalaryByDepartment(@PathVariable Integer id) {
-        return departmentService.findSumSalaryByDepartment(id);
+    public Integer findSumSalaryByDepartment(@PathVariable(value = "id") Integer departmentId) {
+        return departmentService.findSumSalaryByDepartment(departmentId);
     }
 
     @GetMapping("/{id}/salary/max")
